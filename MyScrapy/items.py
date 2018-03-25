@@ -20,6 +20,7 @@ class MyscrapyItem(scrapy.Item):
     # # 评论人数
     # score_num = scrapy.Field()
 
+
     project_id = scrapy.Field()
     project_name = scrapy.Field()
     project_company = scrapy.Field()

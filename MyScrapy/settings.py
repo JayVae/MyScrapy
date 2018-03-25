@@ -14,6 +14,8 @@ BOT_NAME = 'MyScrapy'
 SPIDER_MODULES = ['MyScrapy.spiders']
 NEWSPIDER_MODULE = 'MyScrapy.spiders'
 
+LOG_LEVEL= 'ERROR'
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'MyScrapy (+http://www.yourdomain.com)'

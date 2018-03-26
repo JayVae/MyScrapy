@@ -33,3 +33,9 @@ class MyscrapyItem(scrapy.Item):
     approve_number = scrapy.Field()
 
     pass
+
+class FGWItem(scrapy.Item):
+    title = scrapy.Field()
+    content = scrapy.Field()
+    date = scrapy.Field()
+    pass

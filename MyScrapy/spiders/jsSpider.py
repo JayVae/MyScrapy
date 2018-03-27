@@ -104,13 +104,22 @@ class FGWSpider(Spider):
         # /html/body/form/div[2]/div/div[3]/div/div[2]
         # //*[@id="out-content"]/div[2]/div/div[2]
         # //*[@id="ContentPanel"]/p[1]/span/strong/span
-        title= response.xpath('//*[@id="out-content"]/div[2]/div/div[2]/text()').extract()
-        title2=response.xpath('//*[@id="ContentPanel"]/p[1]/span/strong/span/text()').extract
+        # //*[@id="out-content"]/div[2]/div/table/tbody/tr[1]/td
+        # //*[@id="out-content"]/div[2]/div/table/tbody/tr[1]/td
+        title= response.xpath('//*[@id="out-content"]/div[2]/div/table/tr[1]/td/text()').extract()
+        # //*[@id="ContentPanel"]/p[1]/span/strong/span
+        # title2=response.xpath('//*[@id="ContentPanel"]/p[1]/span/strong/span/text()').extract
         item['title'] = title
-        item['title2']=title2
+        # item['title2']=title2
         # /html/body/form/div[2]/div/div[3]/div/div[4]/div[1]/p/span
         # //*[@id="ContentPanel"]/p[1]/span
-        item['content'] = response.xpath('//*[@id="ContentPanel"]/p/span/span/text()').extract()
+        # data = selector.xpath('//div[@id="test3"]')
+        # info = data.xpath('string(.)').extract()[0]
+        # /html/body/form/div[2]/div/div[3]/div/div[4]
+        # //*[@id="ContentPanel"]
+        content= response.xpath('//*[@id="ContentPanel"]')
+        item['content'] = content.xpath('string(.)').extract()[0].strip()
+        # item['content'] = response.xpath('//*[@id="ContentPanel"]/p/span/span/text()').extract()
         # /html/body/form/div[2]/div/div[3]/div/table/tbody/tr[3]/td[1]
         item['date'] = response.xpath('//*[@id="out-content"]/div[2]/div/table/tr[3]/td[1]/text()').extract()
         item['url']=response.url

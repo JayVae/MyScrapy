@@ -39,7 +39,7 @@ class FGWItem(scrapy.Item):
     content = scrapy.Field()
     date = scrapy.Field()
     url=scrapy.Field()
-    title2 = scrapy.Field()
+    # title2 = scrapy.Field()
     pass
 
 class parasItem(scrapy.Item):

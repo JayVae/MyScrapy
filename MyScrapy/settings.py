@@ -16,10 +16,10 @@ NEWSPIDER_MODULE = 'MyScrapy.spiders'
 
 LOG_LEVEL= 'ERROR'
 DOWNLOAD_DELAY=1
-# ITEM_PIPELINES = {
-#    'MyScrapy.pipelines.MyscrapyPipeline': 500,
-#    # 'DoubanMeinv.pipelines.ImageCachePipeline': 500,
-# }
+ITEM_PIPELINES = {
+   'MyScrapy.pipelines.MyscrapyPipeline': 300,
+   # 'DoubanMeinv.pipelines.ImageCachePipeline': 500,
+}
 
 DB_SERVER = 'MySQLdb'
 DB_CONNECT = {
@@ -27,9 +27,8 @@ DB_CONNECT = {
     'user' : 'root',
     'passwd' : 'root',
     'port' : 3306,
-    'db' :'MeiziFeed',
+    'db' :'fgw',
     'charset' : 'utf8',
-    'use_unicode' : True
 }
 
 

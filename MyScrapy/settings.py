@@ -15,6 +15,22 @@ SPIDER_MODULES = ['MyScrapy.spiders']
 NEWSPIDER_MODULE = 'MyScrapy.spiders'
 
 LOG_LEVEL= 'ERROR'
+DOWNLOAD_DELAY=1
+# ITEM_PIPELINES = {
+#    'MyScrapy.pipelines.MyscrapyPipeline': 500,
+#    # 'DoubanMeinv.pipelines.ImageCachePipeline': 500,
+# }
+
+DB_SERVER = 'MySQLdb'
+DB_CONNECT = {
+    'host' : 'localhost',
+    'user' : 'root',
+    'passwd' : 'root',
+    'port' : 3306,
+    'db' :'MeiziFeed',
+    'charset' : 'utf8',
+    'use_unicode' : True
+}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

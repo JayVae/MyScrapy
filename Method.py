@@ -17,3 +17,5 @@ class method:
         print(VIEWSTATE)
         print(EVENTVALIDATION)
         return VIEWSTATE[0], EVENTVALIDATION[0]
+
+

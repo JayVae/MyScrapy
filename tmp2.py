@@ -6,6 +6,7 @@ import Method
 
 for i in range(1,1000):
     request = urllib.request.Request('http://zfxxgk.ndrc.gov.cn/PublicItemList.aspx')
+    request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36')
     reponse = urllib.request.urlopen(request)
     # try:
     #     reponse = urllib.request.urlopen(request)

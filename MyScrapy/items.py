@@ -38,4 +38,10 @@ class FGWItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
     date = scrapy.Field()
+    url=scrapy.Field()
+    title2 = scrapy.Field()
     pass
+
+class parasItem(scrapy.Item):
+    VIEWSTATE=scrapy.Field()
+    EVENTVALIDATION=scrapy.Field()

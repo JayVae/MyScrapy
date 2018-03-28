@@ -18,6 +18,7 @@ LOG_LEVEL= 'ERROR'
 DOWNLOAD_DELAY=1
 ITEM_PIPELINES = {
    'MyScrapy.pipelines.MyscrapyPipeline': 300,
+   'MyScrapy.pipelines.SplashTestPipeline':300,
    # 'DoubanMeinv.pipelines.ImageCachePipeline': 500,
 }
 
@@ -27,11 +28,31 @@ MYSQL_DBNAME = 'fgw'         #数据库名字，请修改
 MYSQL_USER = 'root'             #数据库账号，请修改
 MYSQL_PASSWD = 'root'         #数据库密码，请修改
 
+
+# 以下是scrapy_splash的配置
+# 渲染服务的url
+# SPLASH_URL = 'http://192.168.99.100:8050'
+SPLASH_URL = 'http://127.0.0.1:8050/'
+#下载器中间件
+DOWNLOADER_MIDDLEWARES = {
+   'scrapy_splash.SplashCookiesMiddleware': 723,
+   'scrapy_splash.SplashMiddleware': 725,
+   'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+# 去重过滤器
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+# 使用Splash的Http缓存
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+# Enable SplashDeduplicateArgsMiddleware:
+SPIDER_MIDDLEWARES = {
+'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'MyScrapy (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

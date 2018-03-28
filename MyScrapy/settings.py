@@ -21,16 +21,11 @@ ITEM_PIPELINES = {
    # 'DoubanMeinv.pipelines.ImageCachePipeline': 500,
 }
 
-DB_SERVER = 'MySQLdb'
-DB_CONNECT = {
-    'host' : 'localhost',
-    'user' : 'root',
-    'passwd' : 'root',
-    'port' : 3306,
-    'db' :'fgw',
-    'charset' : 'utf8',
-}
-
+#Mysql数据库的配置信息
+MYSQL_HOST = '127.0.0.1'
+MYSQL_DBNAME = 'fgw'         #数据库名字，请修改
+MYSQL_USER = 'root'             #数据库账号，请修改
+MYSQL_PASSWD = 'root'         #数据库密码，请修改
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'MyScrapy (+http://www.yourdomain.com)'

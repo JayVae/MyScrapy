@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
+from _md5 import md5
+from datetime import datetime
+
+import MySQLdb
+from scrapy import log
 from scrapy.conf import settings
 from scrapy.exceptions import DropItem
 from twisted.enterprise import adbapi
-import json
+import MySQLdb.cursors
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
@@ -10,88 +15,48 @@ import json
 
 
 class MyscrapyPipeline(object):
-    # 插入的sql语句
-    feed_key = ['title', 'content', 'date', 'url', 'title2']
-    insertFeed_sql = '''insert into MeiziFeed (%s) values (%s)'''
-    feed_query_sql = "select * from MeiziFeed where feedId = %s"
-    feed_seen_sql = "select feedId from MeiziFeed"
-    max_dropcount = 50
-    current_dropcount = 0
 
-    def __init__(self):
-        dbargs = settings.get('DB_CONNECT')
-        db_server = settings.get('DB_SERVER')
-        dbpool = adbapi.ConnectionPool(db_server, **dbargs)
+    def __init__(self, dbpool):
         self.dbpool = dbpool
-        # 更新看过的id列表
-        d = self.dbpool.runInteraction(self.update_feed_seen_ids)
-        d.addErrback(self._database_error)
 
-    def __del__(self):
-        self.dbpool.close()
+    @classmethod
+    def from_settings(cls, settings):
+        '''1、@classmethod声明一个类方法，而对于平常我们见到的叫做实例方法。
+           2、类方法的第一个参数cls（class的缩写，指这个类本身），而实例方法的第一个参数是self，表示该类的一个实例
+           3、可以通过类来调用，就像C.f()，相当于java中的静态方法'''
+        dbparams = dict(
+            host=settings['MYSQL_HOST'],
+            db=settings['MYSQL_DBNAME'],
+            user=settings['MYSQL_USER'],
+            passwd=settings['MYSQL_PASSWD'],
+            charset='utf8',
+            cursorclass=MySQLdb.cursors.DictCursor,
+            use_unicode=False,
+        )
+     # 编码要加上，否则可能出现中文乱码问题 cursorclass=MySQLdb.cursors.DictCursor, use_unicode=False, )
+        dbpool = adbapi.ConnectionPool('MySQLdb',**dbparams)  # **表示将字典扩展为关键字参数,相当于host=xxx,db=yyy....
+        return cls(dbpool)  # 相当于dbpool付给了这个类，self中可以得到
 
-    # 更新feed已录入的id列表
-    def update_feed_seen_ids(self, tx):
-        tx.execute(self.feed_seen_sql)
-        result = tx.fetchall()
-        if result:
-            # id[0]是因为result的子项是tuple类型
-            self.feed_ids_seen = set([int(id[0]) for id in result])
-        else:
-            # 设置已查看过的id列表
-            self.feed_ids_seen = set()
+    #pipeline默认调用
+    def process_item(self, item, spider):
+        quote_info = dict(item)
+        self.dbpool.insert(quote_info)
+        return item
 
-    # 处理每个item并返回
     def process_item(self, item, spider):
         query = self.dbpool.runInteraction(self._conditional_insert, item)
-        query.addErrback(self._database_error, item)
+        query.addErrback(self._handle_error, item, spider)  # 调用异常处理方法
+        return item
 
-        feedId = item['url']
-        if (int(feedId) in self.feed_ids_seen):
-            self.current_dropcount += 1
-            if (self.current_dropcount >= self.max_dropcount):
-                spider.close_down = True
-            raise DropItem("重复的数据:%s" % item['feedId'])
-        else:
-            return item
+    # 写入数据库中
+    # SQL语句在这里
+    def _conditional_insert(self, tx,item):
+        sql = "insert into nyj(url,content,dayp,title) values(%s,%s,%s,%s)"
+        params = item['url'], item['content'], item['date'],item['title']
+        tx.execute(sql, params)
 
-    # 插入数据
-    def _conditional_insert(self, tx, item):
-        # 插入Feed
-        tx.execute(self.feed_query_sql, (item['feedId']))
-        result = tx.fetchone()
-        if result == None:
-            self.insert_data(item, self.insertFeed_sql, self.feed_key)
-        else:
-            print
-            "该feed已存在数据库中:%s" % item['feedId']
-        # 添加进seen列表中
-        feedId = item['feedId']
-        if int(feedId) not in self.feed_ids_seen:
-            self.feed_ids_seen.add(int(feedId))
-        # 插入User
-        user = item['userInfo']
-        tx.execute(self.user_query_sql, (user['userId']))
-        user_result = tx.fetchone()
-        if user_result == None:
-            self.insert_data(user, self.insertUser_sql, self.user_key)
-        else:
-            print
-            "该用户已存在数据库:%s" % user['userId']
-        # 添加进seen列表中
-        userId = user['userId']
-        if int(userId) not in self.user_ids_seen:
-            self.user_ids_seen.add(int(userId))
+    # 错误处理方法
+    def _handle_error(self, failue, item, spider):
+        print(failue)
 
-    # 插入数据到数据库中
-    def insert_data(self, item, insert, sql_key):
-        fields = u','.join(sql_key)
-        qm = u','.join([u'%s'] * len(sql_key))
-        sql = insert % (fields, qm)
-        data = [item[k] for k in sql_key]
-        return self.dbpool.runOperation(sql, data)
 
-    # 数据库错误
-    def _database_error(self, e):
-        print
-        "Database error: ", e

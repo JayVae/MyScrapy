@@ -93,37 +93,32 @@ class FGWSpider(Spider):
 
     def parse(self, response):
         info_urls = self.childrenList
+        not_urls=['http://zfxxgk.ndrc.gov.cn/PublicItemView.aspx?ItemID={e4fa98f2-01f0-4248-8da0-d498aa86643f}','http://zfxxgk.ndrc.gov.cn/PublicItemView.aspx?ItemID={73b2e7d9-f406-42a7-bf80-385f008afc75}']
         # for childurl in self.childrenList:
         for i in range(0, len(info_urls)):
             newinfourl = info_urls[i]
-            # self.getinfo(newinfourl)
-            yield Request(newinfourl, callback=self.parse3)
+            if newinfourl not in not_urls:
+                # self.getinfo(newinfourl)
+                yield Request(newinfourl, callback=self.parse3)
 
     def parse3(self, response):
         item = FGWItem()
-        # /html/body/form/div[2]/div/div[3]/div/div[2]
-        # //*[@id="out-content"]/div[2]/div/div[2]
-        # //*[@id="ContentPanel"]/p[1]/span/strong/span
-        # //*[@id="out-content"]/div[2]/div/table/tbody/tr[1]/td
-        # //*[@id="out-content"]/div[2]/div/table/tbody/tr[1]/td
         title= response.xpath('//*[@id="out-content"]/div[2]/div/table/tr[1]/td/text()').extract()
-        # //*[@id="ContentPanel"]/p[1]/span/strong/span
-        # title2=response.xpath('//*[@id="ContentPanel"]/p[1]/span/strong/span/text()').extract
         item['title'] = title
-        # item['title2']=title2
-        # /html/body/form/div[2]/div/div[3]/div/div[4]/div[1]/p/span
-        # //*[@id="ContentPanel"]/p[1]/span
-        # data = selector.xpath('//div[@id="test3"]')
-        # info = data.xpath('string(.)').extract()[0]
-        # /html/body/form/div[2]/div/div[3]/div/div[4]
-        # //*[@id="ContentPanel"]
         content= response.xpath('//*[@id="ContentPanel"]')
-        item['content'] = content.xpath('string(.)').extract()[0].strip()
-        # item['content'] = response.xpath('//*[@id="ContentPanel"]/p/span/span/text()').extract()
-        # /html/body/form/div[2]/div/div[3]/div/table/tbody/tr[3]/td[1]
-        item['date'] = response.xpath('//*[@id="out-content"]/div[2]/div/table/tr[3]/td[1]/text()').extract()
+        content = content.xpath('string(.)').extract()
+        if content:
+            content=content[0].strip()
+        else:
+            content=r'没有正文'
+        item['content']=content
+        date = response.xpath('//*[@id="out-content"]/div[2]/div/table/tr[3]/td[1]/text()').extract()
+        if date:
+            date = date[0].strip()
+        else:
+            date=r'1970-00-00'
+        item['date'] = date
         item['url']=response.url
-        print(item)
         yield item
 
 

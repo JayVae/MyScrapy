@@ -1,5 +1,5 @@
 from scrapy import cmdline
 
-cmdline.execute("scrapy crawl scrapy_splash".split())
+cmdline.execute("scrapy crawl taobao".split())
 
 # scrapy crawl firstspider -o items.json -t json

@@ -13,7 +13,7 @@ class Spider(scrapy.Spider):
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url=url, callback=self.parse,
-                                args={'wait': 1}, endpoint='render.html',headers=self.headers)
+                                args={'wait': 0.5}, endpoint='render.html',headers=self.headers)
 
     def parse(self, response):
         # //*[@id="J_Itemlist_TLink_560681958734"]

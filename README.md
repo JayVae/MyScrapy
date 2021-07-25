@@ -35,21 +35,28 @@
     > <div id="test3">我左青龙，<span id="tiger">右白虎，<ul>上朱雀，<li>下玄武。</li></ul>老牛在当中，</span>龙头在胸口。<div>
     > ```
     解决方法：*使用xpath的string(.)*
-    > data = selector.xpath('//div[@id="test3"]')
+    > data = selector.xpath('//div[@id="test3"]')  
     > info = data.xpath('string(.)').extract()[0]
     现在就可以获得所有的text了
 2. 登录
+    
     cookiejar
 3. 动态页面面
+    
     selenium
+    
     splash
 4. 验证码
 - （1）人工识别:
-将图片保存下来,通过python脚本获取该图片，保存在本地，在python命令行中采用input()方式，人工识别后输入该验证码
+
+    将图片保存下来,通过python脚本获取该图片，保存在本地，在python命令行中采用input()方式，人工识别后输入该验证码
 - （2）图片验证码
-Selenium + pillow + tesseract（或baidu_api）  
-                   图像处理库      OCR识别API
-- （3）滑动验证码：可以对两张图片（完整和缺口）进行对比，获得偏移量，然后用selenium进行模拟移动。注意，这种方法的前提是两张图片
+
+    Selenium + pillow + tesseract（或baidu_api）     
+                    图像处理库      OCR识别API
+- （3）滑动验证码：
+    
+    可以对两张图片（完整和缺口）进行对比，获得偏移量，然后用selenium进行模拟移动。注意，这种方法的前提是两张图片
 - （4）现在还有用canvas的js前端生成验证图片的，怎么搞？
 
 5. 反爬虫

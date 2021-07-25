@@ -5,6 +5,7 @@
 ## Contains：
 其中包括了爬取地方发改委、国家发改委网站的spiders，涉及到写出文件、存入数据库等，以及网页地址不变的、包含js动态网页、包含验证等等，其中国家发改委网站有很多坑，以后慢慢讲一讲。
 还包括了使用scrapy-splash对动态网页的爬取，跑的是网上的例子，爬取京东网站。
+（爬取动态网页还有一种方法，是selenium）
 
 ## 工具：
 这个过程使用了一个比较方便的chrome插件，toggle JavaScript，屏蔽js。（为什么要屏蔽js？当不用类似scra-splash这些能解析js的包时，scrapy获取的response

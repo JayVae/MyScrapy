@@ -38,8 +38,9 @@
     > data = selector.xpath('//div[@id="test3"]')  
     > info = data.xpath('string(.)').extract()[0]
     现在就可以获得所有的text了
-2. 登录
-    
+- 选择xpath的时候，tbody是不存在的（是浏览器自己加的）。
+- 在选xpath的时候，需要屏蔽js。
+2. 登录    
     cookiejar
 3. 动态页面面
     

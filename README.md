@@ -31,8 +31,14 @@
 1. xpath
 1.1 xpath提取多个标签下的text；
     例如：现在想获得以下html中的文字：
-    > <div id="test3">我左青龙，<span id="tiger">右白虎，<ul>上朱雀，<li>下玄武。</li></ul>老牛在当中，</span>龙头在胸口。<div>
-  
+    > ```javascript
+    <div id="test3">我左青龙，<span id="tiger">右白虎，<ul>上朱雀，<li>下玄武。</li></ul>老牛在当中，</span>龙头在胸口。<div>
+    ```
     解决方法：*使用xpath的string(.)*
-  > data = selector.xpath('//div[@id="test3"]')
-info = data.xpath('string(.)').extract()[0]
+    > data = selector.xpath('//div[@id="test3"]')
+      info = data.xpath('string(.)').extract()[0]
+    现在就可以获得所有的text了
+2. 登录
+3. 动态页面面
+4. 验证码
+5. 反爬虫

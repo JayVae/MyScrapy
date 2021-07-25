@@ -26,3 +26,13 @@
 注意spiders文件夹下的spider可以有多个，对应多个爬虫，因此要运行哪个在begin.py中修改命令scrapy crawl %爬虫名字 即可，注意这里的爬虫名字是你class第一行的name=“”
 然后点击RUN-EDIT CONFIGRATIONS,加号选python文件，然后设置一下名字和目录，就可以看到运行按钮了~~~如下图
 ![scrapy框架](https://raw.githubusercontent.com/JayVae/pictures/master/res/%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C.jpg)
+
+## 关键问题记录
+1. xpath
+1.1 xpath提取多个标签下的text；
+    例如：现在想获得以下html中的文字：
+    > <div id="test3">我左青龙，<span id="tiger">右白虎，<ul>上朱雀，<li>下玄武。</li></ul>老牛在当中，</span>龙头在胸口。<div>
+  
+    解决方法：*使用xpath的string(.)*
+  > data = selector.xpath('//div[@id="test3"]')
+info = data.xpath('string(.)').extract()[0]
